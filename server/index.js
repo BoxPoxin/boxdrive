@@ -148,4 +148,8 @@ app.post('/api/webhooks/supabase', async (req, res) => {
   res.json({ success: true })
 })
 
-app.listen(PORT, () => console.log(`Razorpay API server listening on http://localhost:${PORT}`))
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+  app.listen(PORT, () => console.log(`Razorpay API server listening on http://localhost:${PORT}`))
+}
+
+export default app
