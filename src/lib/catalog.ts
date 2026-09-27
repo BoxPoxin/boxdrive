@@ -28,7 +28,7 @@ export const PRODUCT = {
     standard: {
       id: 'standard' as const,
       name: 'Standard',
-      price: 3799,
+      price: 2999,
     },
   },
 }
