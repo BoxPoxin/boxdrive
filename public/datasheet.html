@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Absolute Unit 17 — Datasheet | BOXPOX</title>
+    <meta name="description"
+        content="Absolute Unit 17 — Closed-Loop Stepper Motor Controller for NEMA 17. ESP32-C6 based with TMC2209, AS5600 encoder, CAN bus, and USB-C programming.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --brand-dark: #0f1419;
+            --brand-accent: #D4A017;
+            --brand-accent-light: #F0C040;
+            --brand-accent-dim: #B8860B;
+            --text-primary: #1a1a2e;
+            --text-secondary: #4a5568;
+            --text-muted: #718096;
+            --border-light: #e2e8f0;
+            --border-medium: #cbd5e1;
+            --bg-subtle: #f7f8fa;
+            --bg-white: #ffffff;
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .page {
+                page-break-after: always;
+                box-shadow: none !important;
+                margin: 0 !important;
+            }
+
+            .page:last-child {
+                page-break-after: auto;
+            }
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-primary);
+            background: #e2e4e8;
+            line-height: 1.5;
+            font-size: 10pt;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===== PAGE ===== */
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            max-height: 297mm;
+            background: var(--bg-white);
+            margin: 20px auto;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== HEADER ===== */
+        .header-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6mm 10mm;
+            border-bottom: 2.5px solid var(--brand-accent);
+            background: var(--bg-white);
+            flex-shrink: 0;
+        }
+
+        .header-logo img {
+            height: 36px;
+            width: auto;
+        }
+
+        .header-right {
+            text-align: right;
+            font-size: 7.5pt;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .header-right .doc-type {
+            font-weight: 700;
+            font-size: 8pt;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 4mm 10mm;
+            border-top: 1px solid var(--border-light);
+            background: var(--bg-subtle);
+            font-size: 6.5pt;
+            color: var(--text-muted);
+            flex-shrink: 0;
+            margin-top: auto;
+        }
+
+        .footer-bar a {
+            color: var(--brand-accent-dim);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* ===== CONTENT ===== */
+        .page-content {
+            flex: 1;
+            padding: 7mm 10mm;
+            overflow: hidden;
+        }
+
+        /* ===== COVER ===== */
+        .cover-hero {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cover-top-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8mm;
+            padding: 6mm 10mm;
+        }
+
+        .cover-text {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .cover-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--brand-accent), var(--brand-accent-dim));
+            color: white;
+            font-size: 6pt;
+            font-weight: 700;
+            padding: 2.5px 12px;
+            border-radius: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 4mm;
+            width: fit-content;
+        }
+
+        .cover-title {
+            font-size: 28pt;
+            font-weight: 900;
+            line-height: 1.05;
+            color: var(--brand-dark);
+            margin-bottom: 2mm;
+            letter-spacing: -0.5px;
+        }
+
+        .cover-title span {
+            color: var(--brand-accent);
+        }
+
+        .cover-subtitle {
+            font-size: 10pt;
+            color: var(--text-secondary);
+            font-weight: 400;
+            line-height: 1.5;
+            margin-bottom: 5mm;
+        }
+
+        .cover-version {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 8pt;
+            color: var(--text-muted);
+            background: var(--bg-subtle);
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 4px;
+            border: 1px solid var(--border-light);
+        }
+
+        .cover-image-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cover-image-wrap img {
+            width: 100%;
+            max-width: 80mm;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        /* Features strip */
+        .features-strip {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+            padding: 0 10mm;
+            background: var(--brand-dark);
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 5mm 3mm;
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .feature-card:last-child {
+            border-right: none;
+        }
+
+        .feature-label {
+            font-size: 7.5pt;
+            font-weight: 700;
+            color: var(--brand-accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1.5mm;
+        }
+
+        .feature-value {
+            font-size: 7pt;
+            color: #cbd5e1;
+            line-height: 1.4;
+        }
+
+        /* Cover gallery */
+        .cover-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3mm;
+            padding: 5mm 10mm;
+        }
+
+        .cover-gallery img {
+            width: 100%;
+            height: 42mm;
+            object-fit: contain;
+            border-radius: 3px;
+            border: 1px solid var(--border-light);
+            background: var(--bg-subtle);
+        }
+
+        /* Cover specs */
+        .cover-specs-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3mm;
+            padding: 4mm 10mm 6mm;
+        }
+
+        .spec-summary-card {
+            background: var(--bg-subtle);
+            border: 1px solid var(--border-light);
+            border-radius: 4px;
+            padding: 3mm 4mm;
+        }
+
+        .spec-summary-card .spec-category {
+            font-size: 6.5pt;
+            font-weight: 700;
+            color: var(--brand-accent-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 2mm;
+            padding-bottom: 1.5mm;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .spec-summary-card .spec-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 0.8mm 0;
+            font-size: 7pt;
+        }
+
+        .spec-summary-card .spec-item .spec-name {
+            color: var(--text-secondary);
+        }
+
+        .spec-summary-card .spec-item .spec-val {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 6.5pt;
+        }
+
+        /* ===== SECTION HEADERS ===== */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 3mm;
+            margin-bottom: 4mm;
+            padding-bottom: 2mm;
+            border-bottom: 2px solid var(--brand-dark);
+        }
+
+        .section-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10pt;
+            font-weight: 700;
+            color: var(--brand-accent);
+            background: var(--brand-dark);
+            width: 8mm;
+            height: 8mm;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        .section-title {
+            font-size: 13pt;
+            font-weight: 800;
+            color: var(--brand-dark);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .section-subtitle {
+            font-size: 8pt;
+            color: var(--text-muted);
+            margin-top: -2mm;
+            margin-bottom: 4mm;
+        }
+
+        /* ===== TABLES ===== */
+        .spec-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 7.5pt;
+            margin-bottom: 5mm;
+        }
+
+        .spec-table thead th {
+            background: var(--brand-dark);
+            color: var(--bg-white);
+            padding: 2.5mm 3mm;
+            text-align: left;
+            font-weight: 700;
+            font-size: 7pt;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .spec-table tbody td {
+            padding: 2.2mm 3mm;
+            border-bottom: 1px solid var(--border-light);
+            vertical-align: top;
+        }
+
+        .spec-table tbody tr:nth-child(even) {
+            background: var(--bg-subtle);
+        }
+
+        .spec-table .mono {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 7pt;
+            color: var(--brand-accent-dim);
+            font-weight: 500;
+        }
+
+        .spec-table .pin-badge {
+            display: inline-block;
+            background: var(--brand-dark);
+            color: var(--brand-accent);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 6.5pt;
+            padding: 1px 7px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        /* ===== LAYOUTS ===== */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5mm;
+        }
+
+        .three-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 4mm;
+        }
+
+        /* ===== INFO BOXES ===== */
+        .info-box {
+            background: linear-gradient(135deg, #fffbeb, #fef9c3);
+            border: 1px solid #fde68a;
+            border-left: 3px solid var(--brand-accent);
+            border-radius: 4px;
+            padding: 3mm 4mm;
+            margin-bottom: 5mm;
+            font-size: 7.5pt;
+            line-height: 1.5;
+        }
+
+        .info-box.warning {
+            background: linear-gradient(135deg, #fff7ed, #fffbeb);
+            border-color: #fed7aa;
+            border-left-color: #f59e0b;
+        }
+
+        .info-box.info {
+            background: linear-gradient(135deg, #fffbeb, #fef3c7);
+            border-color: #fde68a;
+            border-left-color: var(--brand-accent);
+        }
+
+        .info-box strong {
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* ===== DESC BLOCKS ===== */
+        .desc-block {
+            margin-bottom: 4mm;
+        }
+
+        .desc-block h3 {
+            font-size: 9pt;
+            font-weight: 700;
+            color: var(--brand-dark);
+            margin-bottom: 1.5mm;
+        }
+
+        .desc-block p,
+        .desc-block ul {
+            font-size: 7.5pt;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .desc-block ul {
+            padding-left: 4mm;
+        }
+
+        .desc-block ul li {
+            margin-bottom: 1mm;
+        }
+
+        .desc-block ul li::marker {
+            color: var(--brand-accent);
+        }
+
+        /* ===== APP NOTES ===== */
+        .app-note {
+            background: var(--bg-subtle);
+            border: 1px solid var(--border-light);
+            border-radius: 4px;
+            padding: 4mm;
+            margin-bottom: 3mm;
+        }
+
+        .app-note-title {
+            font-size: 8pt;
+            font-weight: 700;
+            color: var(--brand-dark);
+            margin-bottom: 2mm;
+            display: flex;
+            align-items: center;
+            gap: 2mm;
+        }
+
+        .app-note-title .icon {
+            width: 5mm;
+            height: 5mm;
+            background: var(--brand-accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 7pt;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .app-note p {
+            font-size: 7.5pt;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* ===== BLOCK DIAGRAM ===== */
+        .block-diagram {
+            background: var(--bg-white);
+            border: 1px solid var(--border-light);
+            border-radius: 4px;
+            padding: 4mm;
+            margin-bottom: 5mm;
+        }
+
+        /* ===== DIMENSION FIGURES ===== */
+        .dimension-figure {
+            text-align: center;
+            margin-bottom: 4mm;
+        }
+
+        .dimension-figure img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid var(--border-light);
+            border-radius: 4px;
+            background: white;
+        }
+
+        .dimension-figure figcaption {
+            font-size: 7pt;
+            color: var(--text-muted);
+            margin-top: 2mm;
+            font-style: italic;
+        }
+
+        /* ===== ABS MAX TABLE ===== */
+        .abs-max-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 7.5pt;
+            margin-bottom: 5mm;
+        }
+
+        .abs-max-table th {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 2.2mm 3mm;
+            text-align: left;
+            font-weight: 700;
+            font-size: 7pt;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--brand-accent);
+        }
+
+        .abs-max-table td {
+            padding: 2.2mm 3mm;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .abs-max-table tr:nth-child(even) {
+            background: #fffbeb;
+        }
+
+        /* ===== ORDER BOX ===== */
+        .order-box {
+            background: var(--brand-dark);
+            color: white;
+            border-radius: 4px;
+            padding: 5mm;
+            text-align: center;
+        }
+
+        .order-box .part-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 16pt;
+            font-weight: 700;
+            color: var(--brand-accent);
+            letter-spacing: 2px;
+            margin-bottom: 2mm;
+        }
+
+        .order-box .part-desc {
+            font-size: 8pt;
+            color: #94a3b8;
+            margin-bottom: 3mm;
+        }
+
+        .order-box .order-url {
+            font-size: 8pt;
+            color: var(--brand-accent);
+            font-weight: 600;
+        }
+
+        /* ===== REVISION TABLE ===== */
+        .revision-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 7.5pt;
+        }
+
+        .revision-table th {
+            background: var(--bg-subtle);
+            padding: 2.2mm 3mm;
+            text-align: left;
+            font-weight: 700;
+            font-size: 7pt;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--border-medium);
+        }
+
+        .revision-table td {
+            padding: 2.2mm 3mm;
+            border-bottom: 1px solid var(--border-light);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================================================================
+     PAGE 1 — COVER
+================================================================= -->
+    <div class="page" id="page-1">
+        <div class="header-bar">
+            <div class="header-logo"><img src="boxpox_logo.png" alt="BOXPOX"></div>
+            <div class="header-right">
+                <div class="doc-type">Product Datasheet</div>
+                Rev 3.26 &nbsp;|&nbsp; September 2026<br>boxpox.in
+            </div>
+        </div>
+
+        <div class="cover-hero">
+            <div class="cover-top-section">
+                <div class="cover-text">
+                    <div class="cover-badge">Closed-Loop Stepper Controller</div>
+                    <h1 class="cover-title">ABSOLUTE<br>UNIT <span>17</span></h1>
+                    <p class="cover-subtitle">
+                        High-performance closed-loop stepper motor controller for NEMA 17 motors. Featuring ESP32-C6,
+                        TMC2209 silent driver, AS5600 magnetic encoder, CAN bus networking, and USB-C programming — all
+                        in a compact 42mm &times; 42mm form factor.
+                    </p>
+                    <span class="cover-version">HW v3.26 &nbsp;&bull;&nbsp; ESP32-C6 Mini</span>
+                </div>
+                <div class="cover-image-wrap">
+                    <img src="pic1.png" alt="Absolute Unit 17 — 3D Render">
+                </div>
+            </div>
+
+            <div class="features-strip">
+                <div class="feature-card">
+                    <div class="feature-label">Silent Driving</div>
+                    <div class="feature-value">TMC2209 with<br>StealthChop &amp; SpreadCycle</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-label">12-Bit Encoder</div>
+                    <div class="feature-value">AS5600 Magnetic<br>0.0879&deg; Resolution</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-label">CAN Bus</div>
+                    <div class="feature-value">SN65HVD230 Transceiver<br>Daisy-Chain Ready</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-label">Wi-Fi 6 + BLE 5</div>
+                    <div class="feature-value">ESP32-C6 RISC-V<br>OTA Capable</div>
+                </div>
+            </div>
+
+            <div class="cover-gallery">
+                <img src="pic3.png" alt="PCB Top View">
+                <img src="pic4.png" alt="PCB Detailed View">
+                <img src="pic2.png" alt="PCB Bottom View">
+            </div>
+
+            <div class="cover-specs-summary">
+                <div class="spec-summary-card">
+                    <div class="spec-category">Microcontroller</div>
+                    <div class="spec-item"><span class="spec-name">MCU</span><span class="spec-val">ESP32-C6</span>
+                    </div>
+                    <div class="spec-item"><span class="spec-name">Core</span><span class="spec-val">RISC-V
+                            160MHz</span></div>
+                    <div class="spec-item"><span class="spec-name">Flash</span><span class="spec-val">4 MB</span></div>
+                    <div class="spec-item"><span class="spec-name">SRAM</span><span class="spec-val">512 KB</span></div>
+                    <div class="spec-item"><span class="spec-name">Wireless</span><span class="spec-val">Wi-Fi 6 / BLE
+                            5</span></div>
+                </div>
+                <div class="spec-summary-card">
+                    <div class="spec-category">Motor Driver</div>
+                    <div class="spec-item"><span class="spec-name">Driver IC</span><span class="spec-val">TMC2209</span>
+                    </div>
+                    <div class="spec-item"><span class="spec-name">V<sub>motor</sub></span><span
+                            class="spec-val">4.75&ndash;24 V</span></div>
+                    <div class="spec-item"><span class="spec-name">I<sub>max</sub></span><span class="spec-val">2.0 A
+                            RMS</span></div>
+                    <div class="spec-item"><span class="spec-name">Microstep</span><span class="spec-val">Up to
+                            1/256</span></div>
+                    <div class="spec-item"><span class="spec-name">Interface</span><span class="spec-val">UART</span>
+                    </div>
+                </div>
+                <div class="spec-summary-card">
+                    <div class="spec-category">Mechanical</div>
+                    <div class="spec-item"><span class="spec-name">Dimensions</span><span class="spec-val">42.31 &times;
+                            42.31 mm</span></div>
+                    <div class="spec-item"><span class="spec-name">Height</span><span class="spec-val">9.1 mm</span>
+                    </div>
+                    <div class="spec-item"><span class="spec-name">Mounting</span><span class="spec-val">4&times; M3
+                            Holes</span></div>
+                    <div class="spec-item"><span class="spec-name">Connector</span><span class="spec-val">XT30PW
+                            Daisy</span></div>
+                    <div class="spec-item"><span class="spec-name">Program</span><span class="spec-val">USB
+                            Type-C</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bar">
+            <span>&copy; 2026 BOXPOX Technology Studio &nbsp;&bull;&nbsp; Designed &amp; Developed in India</span>
+            <span><a href="https://boxpox.in">boxpox.in</a> &nbsp;|&nbsp; Page 1 of 5</span>
+        </div>
+    </div>
+
+
+    <!-- ================================================================
+     PAGE 2 — PRODUCT DESCRIPTION & PIN CONFIGURATION
+================================================================= -->
+    <div class="page" id="page-2">
+        <div class="header-bar">
+            <div class="header-logo"><img src="boxpox_logo.png" alt="BOXPOX"></div>
+            <div class="header-right">
+                <div class="doc-type">Absolute Unit 17 &mdash; Datasheet</div>
+                Rev 3.26 &nbsp;|&nbsp; Page 2 of 5
+            </div>
+        </div>
+
+        <div class="page-content">
+            <div class="section-header">
+                <div class="section-number">1</div>
+                <h2 class="section-title">Product Description</h2>
+            </div>
+
+            <div class="two-col" style="margin-bottom:6mm;">
+                <div>
+                    <div class="desc-block">
+                        <h3>Overview</h3>
+                        <p>
+                            The <strong>Absolute Unit 17</strong> is a compact, high-performance closed-loop stepper
+                            motor controller specifically designed for NEMA 17 stepper motors. It integrates an ESP32-C6
+                            microcontroller, TMC2209 stepper driver, AS5600 magnetic rotary encoder, and CAN bus
+                            transceiver into a single 42mm &times; 42mm PCB &mdash; making it ideal for robotics, CNC,
+                            3D printing, and precision motion control applications.
+                        </p>
+                    </div>
+                    <div class="desc-block">
+                        <h3>Key Features</h3>
+                        <ul>
+                            <li>True closed-loop control with 12-bit absolute position feedback</li>
+                            <li>Ultra-silent operation via TMC2209 StealthChop technology</li>
+                            <li>CAN bus networking for multi-axis daisy-chain configurations</li>
+                            <li>Wi-Fi 6 and Bluetooth 5.0 wireless connectivity</li>
+                            <li>USB Type-C for programming and debugging</li>
+                            <li>XT30PW power connectors for robust daisy-chain power distribution</li>
+                            <li>Compact NEMA 17 mounting-compatible form factor</li>
+                            <li>On-board status LED for visual diagnostics</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="desc-block">
+                        <h3>Target Applications</h3>
+                        <ul>
+                            <li>Robotic arms &amp; multi-axis systems</li>
+                            <li>3D printers with closed-loop feedback</li>
+                            <li>CNC machines &amp; laser engravers</li>
+                            <li>Camera gimbals &amp; pan-tilt systems</li>
+                            <li>Automated laboratory equipment</li>
+                            <li>Smart conveyor systems</li>
+                            <li>IoT-connected motion platforms</li>
+                        </ul>
+                    </div>
+                    <div class="info-box info">
+                        <strong>Designed for Integration:</strong> The board mounts directly behind a NEMA 17 motor
+                        using the standard 31mm mounting pattern. The AS5600 encoder on the back side reads a
+                        diametrically magnetized magnet attached to the motor shaft, providing real-time absolute
+                        position feedback.
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-header">
+                <div class="section-number">2</div>
+                <h2 class="section-title">Pin Configuration</h2>
+            </div>
+            <p class="section-subtitle">ESP32-C6 GPIO assignments for on-board peripherals</p>
+
+            <table class="spec-table">
+                <thead>
+                    <tr>
+                        <th style="width:16%;">GPIO Pin</th>
+                        <th style="width:20%;">Signal Name</th>
+                        <th style="width:14%;">Direction</th>
+                        <th style="width:18%;">Connected To</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="pin-badge">GPIO 0</span></td>
+                        <td class="mono">TMC_DIR</td>
+                        <td>Output</td>
+                        <td>TMC2209 DIR</td>
+                        <td>Motor rotation direction control</td>
+                    </tr>
+                    <tr>
+                        <td><span class="pin-badge">GPIO 1</span></td>
+                        <td class="mono">TMC_STEP</td>
+                        <td>Output</td>
+                        <td>TMC2209 STEP</td>
+                        <td>Step pulse signal (rising-edge triggered)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="pin-badge">GPIO 2</span></td>
+                        <td class="mono">TMC_EN</td>
+                        <td>Output</td>
+                        <td>TMC2209 EN</td>
+                        <td>Driver enable (active LOW)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="pin-badge">GPIO 14</span></td>
+                        <td class="mono">TMC_UART_RX</td>
+                        <td>Input</td>
+                        <td>TMC2209 UART</td>
+                        <td>UART receive for diagnostics &amp; configuration</td>
+                    </tr>
+                    <tr>
+                        <td><span class="pin-badge">GPIO 18</span></td>
+                        <td class="mono">TMC_UART_TX</td>
+                        <td>Output</td>
+                        <td>TMC2209 UART</td>
+                        <td>UART transmit for register read/write</td>
+                    </tr>
+                    <tr>
+                        <td><span class="pin-badge">GPIO 19</span></td>
+                        <td class="mono">STATUS_LED</td>
+                        <td>Output</td>
+                        <td>LED (via R)</td>
+                        <td>On-board status indicator LED</td>
+                    </tr>
+                    <tr>
+                        <td><span class="pin-badge">GPIO 22</span></td>
+                        <td class="mono">I2C_SCL</td>
+                        <td>Open-drain</td>
+                        <td>AS5600 SCL</td>
+                        <td>I&sup2;C clock line (with pull-up)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="pin-badge">GPIO 23</span></td>
+                        <td class="mono">I2C_SDA</td>
+                        <td>Open-drain</td>
+                        <td>AS5600 SDA</td>
+                        <td>I&sup2;C data line (with pull-up)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="info-box warning">
+                <strong>Note:</strong> The TMC2209 EN pin is <strong>active LOW</strong>. Drive GPIO 2 LOW to enable the
+                motor driver, HIGH to disable. The UART interface operates at 115200 baud by default and can be used to
+                configure motor current, microstepping, StallGuard thresholds, and CoolStep parameters at runtime.
+            </div>
+        </div>
+
+        <div class="footer-bar">
+            <span>&copy; 2026 BOXPOX Technology Studio &nbsp;&bull;&nbsp; Designed &amp; Developed in India</span>
+            <span><a href="https://boxpox.in">boxpox.in</a> &nbsp;|&nbsp; Page 2 of 5</span>
+        </div>
+    </div>
+
+
+    <!-- ================================================================
+     PAGE 3 — COMMUNICATION INTERFACES & ELECTRICAL CHARACTERISTICS
+================================================================= -->
+    <div class="page" id="page-3">
+        <div class="header-bar">
+            <div class="header-logo"><img src="boxpox_logo.png" alt="BOXPOX"></div>
+            <div class="header-right">
+                <div class="doc-type">Absolute Unit 17 &mdash; Datasheet</div>
+                Rev 3.26 &nbsp;|&nbsp; Page 3 of 5
+            </div>
+        </div>
+
+        <div class="page-content">
+            <div class="section-header">
+                <div class="section-number">3</div>
+                <h2 class="section-title">Communication Interfaces</h2>
+            </div>
+
+            <div class="two-col" style="margin-bottom:6mm;">
+                <div class="app-note">
+                    <div class="app-note-title">
+                        <div class="icon">C</div> CAN Bus Interface
+                    </div>
+                    <p>The on-board <strong>SN65HVD230QDRG4Q1</strong> CAN transceiver provides a robust, noise-immune
+                        differential bus for multi-node communication. Supports CAN 2.0B at up to 1 Mbps. Ideal for
+                        daisy-chaining multiple boards in multi-axis configurations. XT30PW connectors provide power and
+                        CAN signal pass-through.</p>
+                </div>
+                <div class="app-note">
+                    <div class="app-note-title">
+                        <div class="icon">I</div> I2C Bus (AS5600)
+                    </div>
+                    <p>The AS5600 12-bit magnetic rotary encoder communicates over I2C at address <strong>0x36</strong>.
+                        Provides absolute angle measurement with 0.0879&deg; resolution (4096 positions/revolution).
+                        Reads a diametrically magnetized magnet on the motor shaft for closed-loop feedback.</p>
+                </div>
+            </div>
+
+            <div class="two-col" style="margin-bottom:8mm;">
+                <div class="app-note">
+                    <div class="app-note-title">
+                        <div class="icon">U</div> UART (TMC2209)
+                    </div>
+                    <p>Single-wire UART interface for configuring motor current, microstepping, StallGuard sensitivity,
+                        and CoolStep parameters at runtime. Default 115200 baud. Enables advanced diagnostics including
+                        load measurement, over-temperature detection, and open-load reporting.</p>
+                </div>
+                <div class="app-note">
+                    <div class="app-note-title">
+                        <div class="icon">W</div> Wireless (ESP32-C6)
+                    </div>
+                    <p>Integrated Wi-Fi 6 (802.11ax) and Bluetooth 5.0 LE via the ESP32-C6 on-chip radio with PCB
+                        antenna. Enables OTA firmware updates, wireless parameter tuning, telemetry streaming, and
+                        integration with IoT platforms.</p>
+                </div>
+            </div>
+
+            <div class="section-header">
+                <div class="section-number">4</div>
+                <h2 class="section-title">Electrical Characteristics</h2>
+            </div>
+
+            <div class="two-col" style="margin-bottom:6mm;">
+                <div>
+                    <h3 style="font-size:9pt; font-weight:700; margin-bottom:3mm; color:var(--brand-dark);">Absolute
+                        Maximum Ratings</h3>
+                    <table class="abs-max-table">
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Symbol</th>
+                                <th>Value</th>
+                                <th>Unit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Motor Supply Voltage</td>
+                                <td style="font-family:'JetBrains Mono';font-size:7pt;">V<sub>motor</sub></td>
+                                <td><strong>24</strong></td>
+                                <td>V</td>
+                            </tr>
+                            <tr>
+                                <td>Logic Supply Voltage</td>
+                                <td style="font-family:'JetBrains Mono';font-size:7pt;">V<sub>IO</sub></td>
+                                <td><strong>3.6</strong></td>
+                                <td>V</td>
+                            </tr>
+                            <tr>
+                                <td>Motor Current (peak)</td>
+                                <td style="font-family:'JetBrains Mono';font-size:7pt;">I<sub>peak</sub></td>
+                                <td><strong>2.8</strong></td>
+                                <td>A</td>
+                            </tr>
+                            <tr>
+                                <td>Operating Temperature</td>
+                                <td style="font-family:'JetBrains Mono';font-size:7pt;">T<sub>op</sub></td>
+                                <td><strong>&ndash;20 to +85</strong></td>
+                                <td>&deg;C</td>
+                            </tr>
+                            <tr>
+                                <td>Storage Temperature</td>
+                                <td style="font-family:'JetBrains Mono';font-size:7pt;">T<sub>stg</sub></td>
+                                <td><strong>&ndash;40 to +125</strong></td>
+                                <td>&deg;C</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div>
+                    <h3 style="font-size:9pt; font-weight:700; margin-bottom:3mm; color:var(--brand-dark);">Recommended
+                        Operating Conditions</h3>
+                    <table class="spec-table">
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Min</th>
+                                <th>Typ</th>
+                                <th>Max</th>
+                                <th>Unit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Motor Supply</td>
+                                <td>4.75</td>
+                                <td>12</td>
+                                <td>24</td>
+                                <td>V</td>
+                            </tr>
+                            <tr>
+                                <td>Motor Current (RMS)</td>
+                                <td>&mdash;</td>
+                                <td>1.2</td>
+                                <td>2.0</td>
+                                <td>A</td>
+                            </tr>
+                            <tr>
+                                <td>Logic Voltage</td>
+                                <td>3.0</td>
+                                <td>3.3</td>
+                                <td>3.6</td>
+                                <td>V</td>
+                            </tr>
+                            <tr>
+                                <td>UART Baud Rate</td>
+                                <td>9600</td>
+                                <td>115200</td>
+                                <td>500k</td>
+                                <td>bps</td>
+                            </tr>
+                            <tr>
+                                <td>I&sup2;C Clock</td>
+                                <td>&mdash;</td>
+                                <td>400</td>
+                                <td>1000</td>
+                                <td>kHz</td>
+                            </tr>
+                            <tr>
+                                <td>CAN Bus Rate</td>
+                                <td>125</td>
+                                <td>500</td>
+                                <td>1000</td>
+                                <td>kbps</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>Thermal Note:</strong> The TMC2209 features automatic thermal shutdown protection at 150&deg;C
+                junction temperature. For sustained operation above 1.5A RMS, ensure adequate airflow or heatsinking on
+                the driver IC. The board&#39;s 4-layer PCB design provides ground-plane thermal relief.
+            </div>
+        </div>
+
+        <div class="footer-bar">
+            <span>&copy; 2026 BOXPOX Technology Studio &nbsp;&bull;&nbsp; Designed &amp; Developed in India</span>
+            <span><a href="https://boxpox.in">boxpox.in</a> &nbsp;|&nbsp; Page 3 of 5</span>
+        </div>
+    </div>
+
+
+    <!-- ================================================================
+     PAGE 4 — COMPONENT SPECS & MECHANICAL DIMENSIONS
+================================================================= -->
+    <div class="page" id="page-4">
+        <div class="header-bar">
+            <div class="header-logo"><img src="boxpox_logo.png" alt="BOXPOX"></div>
+            <div class="header-right">
+                <div class="doc-type">Absolute Unit 17 &mdash; Datasheet</div>
+                Rev 3.26 &nbsp;|&nbsp; Page 4 of 5
+            </div>
+        </div>
+
+        <div class="page-content">
+            <div class="section-header">
+                <div class="section-number">5</div>
+                <h2 class="section-title">Component Specifications</h2>
+            </div>
+
+            <table class="spec-table">
+                <thead>
+                    <tr>
+                        <th style="width:14%;">Designator</th>
+                        <th style="width:18%;">Component</th>
+                        <th style="width:24%;">Part Number</th>
+                        <th>Key Specifications</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>U1</strong></td>
+                        <td>Microcontroller</td>
+                        <td class="mono">ESP32-C6-MINI-1</td>
+                        <td>RISC-V 160MHz, 4MB Flash, 512KB SRAM, Wi-Fi 6, BLE 5.0, integrated antenna</td>
+                    </tr>
+                    <tr>
+                        <td><strong>U2</strong></td>
+                        <td>Stepper Driver</td>
+                        <td class="mono">TMC2209-LA</td>
+                        <td>Up to 2A RMS, 1/256 microstepping, StealthChop, SpreadCycle, StallGuard4, CoolStep</td>
+                    </tr>
+                    <tr>
+                        <td><strong>U3</strong></td>
+                        <td>CAN Transceiver</td>
+                        <td class="mono">SN65HVD230QDRG4Q1</td>
+                        <td>3.3V CAN transceiver, up to 1 Mbps, AEC-Q100 automotive qualified, low power standby</td>
+                    </tr>
+                    <tr>
+                        <td><strong>U4</strong></td>
+                        <td>Rotary Encoder</td>
+                        <td class="mono">AS5600-ASOM</td>
+                        <td>12-bit absolute position, contactless magnetic, I&sup2;C output, 0.0879&deg; resolution</td>
+                    </tr>
+                    <tr>
+                        <td><strong>J1, J3</strong></td>
+                        <td>Power Connector</td>
+                        <td class="mono">XT30PW-M (2+2)</td>
+                        <td>2-pin + 2-pin right-angle, 15A rated, daisy-chain power + CAN bus pass-through</td>
+                    </tr>
+                    <tr>
+                        <td><strong>J2</strong></td>
+                        <td>Motor Header</td>
+                        <td class="mono">4-Pin Header</td>
+                        <td>2.54mm pitch, labeled AA / AB / BA / BB for bipolar stepper coil connections</td>
+                    </tr>
+                    <tr>
+                        <td><strong>J4</strong></td>
+                        <td>USB Connector</td>
+                        <td class="mono">USB Type-C</td>
+                        <td>USB 2.0, programming and debugging via ESP32-C6 native USB</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="section-header">
+                <div class="section-number">6</div>
+                <h2 class="section-title">Application Notes</h2>
+            </div>
+
+            <div class="three-col" style="margin-bottom:8mm;">
+                <div class="app-note">
+                    <div class="app-note-title">
+                        <div class="icon">1</div> Closed-Loop Operation
+                    </div>
+                    <p>Mount the board on the rear of a NEMA 17 motor with a &empty;6mm diametrically magnetized magnet
+                        glued to the shaft. The AS5600 detects position and feeds it back to the ESP32-C6, which adjusts
+                        step timing to eliminate missed steps.</p>
+                </div>
+                <div class="app-note">
+                    <div class="app-note-title">
+                        <div class="icon">2</div> Daisy-Chain Wiring
+                    </div>
+                    <p>Connect multiple boards via XT30PW connectors in a daisy-chain topology. Power and CAN bus
+                        signals pass through. Terminate the last node with a 120&Omega; resistor across CAN_H and CAN_L.
+                    </p>
+                </div>
+                <div class="app-note">
+                    <div class="app-note-title">
+                        <div class="icon">3</div> Firmware Update
+                    </div>
+                    <p>Connect via USB Type-C and use ESP-IDF, Arduino IDE, or PlatformIO to flash firmware. The
+                        ESP32-C6 also supports OTA updates via Wi-Fi for remote deployment across all nodes.</p>
+                </div>
+            </div>
+
+            <!-- Board image -->
+            <div style="text-align:center; margin-top:auto; padding-top:4mm;">
+                <img src="pic5.png" alt="Absolute Unit 17 — 3D Perspective View"
+                    style="max-height:65mm; width:auto; border-radius:4px; border:1px solid var(--border-light); box-shadow:0 2px 12px rgba(0,0,0,0.05);">
+                <div style="font-size:7pt; color:var(--text-muted); margin-top:3mm; font-style:italic;">Figure 6.1
+                    &mdash; Absolute Unit 17, perspective view</div>
+            </div>
+
+        </div>
+
+        <div class="footer-bar">
+            <span>&copy; 2026 BOXPOX Technology Studio &nbsp;&bull;&nbsp; Designed &amp; Developed in India</span>
+            <span><a href="https://boxpox.in">boxpox.in</a> &nbsp;|&nbsp; Page 4 of 5</span>
+        </div>
+    </div>
+
+
+    <!-- ================================================================
+     PAGE 5 — MECHANICAL DIMENSIONS & ORDERING
+================================================================= -->
+    <div class="page" id="page-5">
+        <div class="header-bar">
+            <div class="header-logo"><img src="boxpox_logo.png" alt="BOXPOX"></div>
+            <div class="header-right">
+                <div class="doc-type">Absolute Unit 17 &mdash; Datasheet</div>
+                Rev 3.26 &nbsp;|&nbsp; Page 5 of 5
+            </div>
+        </div>
+
+        <div class="page-content">
+            <div class="section-header">
+                <div class="section-number">7</div>
+                <h2 class="section-title">Mechanical Dimensions</h2>
+            </div>
+            <p class="section-subtitle">All dimensions in millimeters (mm). Tolerances: &plusmn;0.1mm unless otherwise
+                noted.</p>
+
+            <div class="two-col" style="margin-bottom:6mm;">
+                <figure class="dimension-figure">
+                    <img src="dimentions top.png" alt="Top View Dimensions" style="max-height:50mm; width:auto;">
+                    <figcaption>Figure 7.1 &mdash; Top View Dimensions</figcaption>
+                </figure>
+                <figure class="dimension-figure">
+                    <img src="dimention side.png" alt="Side Profile Dimensions" style="max-height:50mm; width:auto;">
+                    <figcaption>Figure 7.2 &mdash; Side Profile Dimensions</figcaption>
+                </figure>
+            </div>
+
+            <table class="spec-table" style="margin-bottom:8mm;">
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Value</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Board Width &times; Length</td>
+                        <td style="font-family:'JetBrains Mono';font-weight:600;">42.31 &times; 42.31 mm</td>
+                        <td>Square form factor with chamfered corners (R1.65)</td>
+                    </tr>
+                    <tr>
+                        <td>Overall Height (top)</td>
+                        <td style="font-family:'JetBrains Mono';font-weight:600;">9.1 mm</td>
+                        <td>From PCB bottom surface to tallest component</td>
+                    </tr>
+                    <tr>
+                        <td>Bottom Component Height</td>
+                        <td style="font-family:'JetBrains Mono';font-weight:600;">1.13 mm</td>
+                        <td>AS5600 encoder and passives on back side</td>
+                    </tr>
+                    <tr>
+                        <td>NEMA 17 Hole Spacing</td>
+                        <td style="font-family:'JetBrains Mono';font-weight:600;">28.83 mm</td>
+                        <td>Center-to-center, compatible with standard NEMA 17</td>
+                    </tr>
+                    <tr>
+                        <td>Mounting Holes</td>
+                        <td style="font-family:'JetBrains Mono';font-weight:600;">4&times; M3 (&empty;3.3 mm)</td>
+                        <td>Corner-mounted through-holes for M3 screws</td>
+                    </tr>
+                    <tr>
+                        <td>PCB Layers / Thickness</td>
+                        <td style="font-family:'JetBrains Mono';font-weight:600;">4-Layer / 1.6 mm</td>
+                        <td>FR-4 substrate, Signal&ndash;GND&ndash;Power&ndash;Signal</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="section-header">
+                <div class="section-number">8</div>
+                <h2 class="section-title">Ordering Information</h2>
+            </div>
+
+            <div class="two-col" style="margin-bottom:8mm;">
+                <div class="order-box">
+                    <div class="part-number">AU17-V326</div>
+                    <div class="part-desc">Absolute Unit 17 &mdash; Closed-Loop Stepper Controller<br>Fully assembled
+                        and tested PCB</div>
+                    <div class="order-url">boxpox.in</div>
+                </div>
+                <div>
+                    <table class="spec-table" style="margin-bottom:0;">
+                        <thead>
+                            <tr>
+                                <th>Part Number</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="mono">AU17-V326</td>
+                                <td>Absolute Unit 17, v3.26, fully assembled</td>
+                            </tr>
+                            <tr>
+                                <td class="mono">AU17-MAG6</td>
+                                <td>&empty;6mm diametrically magnetized magnet</td>
+                            </tr>
+                            <tr>
+                                <td class="mono">AU17-CBL-XT30</td>
+                                <td>XT30PW daisy-chain cable, 200mm</td>
+                            </tr>
+                            <tr>
+                                <td class="mono">AU17-CBL-MTR</td>
+                                <td>NEMA 17 motor cable, 4-pin, 300mm</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Bottom strip -->
+            <div style="text-align:center; padding:4mm 0 2mm; border-top:2px solid var(--brand-dark); margin-top:auto;">
+                <div style="margin-bottom:2mm;"><img src="boxpox_logo.png" alt="BOXPOX"
+                        style="height:36px; width:auto;"></div>
+                <div style="font-size:7pt; color:var(--text-muted); letter-spacing:1.5px; text-transform:uppercase;">
+                    Technology Studio</div>
+                <div style="font-size:7.5pt; color:var(--text-secondary); margin-top:2mm;">
+                    <strong>Web:</strong> boxpox.in &nbsp;&nbsp;|&nbsp;&nbsp; <strong>Designed &amp; Developed in
+                        India</strong>
+                </div>
+                <div style="font-size:6.5pt; color:var(--text-muted); margin-top:2mm; line-height:1.5;">
+                    This document is provided as-is. Specifications are subject to change without notice.<br>
+                    &copy; 2026 BOXPOX Technology Studio. All rights reserved.
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bar">
+            <span>&copy; 2026 BOXPOX Technology Studio &nbsp;&bull;&nbsp; Designed &amp; Developed in India</span>
+            <span><a href="https://boxpox.in">boxpox.in</a> &nbsp;|&nbsp; Page 5 of 5</span>
+        </div>
+    </div>
+
+</body>
+
+</html>
