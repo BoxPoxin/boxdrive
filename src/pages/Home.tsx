@@ -113,8 +113,8 @@ void loop() {
       </section>
 
       {/* ── Feature band ───────────────────────── */}
-      <section className="feature-band" style={{ display: 'flex', flexWrap: 'wrap', gap: '4rem', alignItems: 'center', marginBottom: '8rem' }}>
-        <div className="feature-copy reveal" style={{ flex: '1 1 400px' }}>
+      <section className="feature-band">
+        <div className="feature-copy reveal">
           <h2>From idea to motion in minutes.</h2>
           <p>
             Don&apos;t spend a weekend wiring a driver, encoder and MCU on a
@@ -130,17 +130,11 @@ void loop() {
           width="800"
           height="800"
           loading="lazy"
-          style={{ flex: '1 1 400px', maxWidth: '100%', borderRadius: '12px' }}
+          style={{ width: '100%', maxWidth: '450px', height: 'auto', borderRadius: '12px', margin: '0 auto', display: 'block' }}
         />
       </section>
 
-      <section className="feature-band" style={{ display: 'flex', flexWrap: 'wrap', gap: '4rem', alignItems: 'center', marginBottom: '8rem', flexDirection: 'row-reverse' }}>
-        <div className="feature-copy reveal" style={{ flex: '1 1 400px' }}>
-          <h2>Know exactly what you're doing.</h2>
-          <p>
-            With clear silkscreen indicators and logically grouped I/O, BOXDRIVE makes it immediately obvious where everything goes. The onboard ESP32-C6 gives you the freedom to build exactly what you want.
-          </p>
-        </div>
+      <section className="feature-band" style={{ background: 'var(--c-bg-raised)', color: 'var(--c-text)' }}>
         <img
           src="/illustration.png"
           alt="BOXDRIVE pop-art comic style isometric view"
@@ -148,12 +142,18 @@ void loop() {
           width="800"
           height="800"
           loading="lazy"
-          style={{ flex: '1 1 400px', maxWidth: '100%', borderRadius: '12px' }}
+          style={{ width: '100%', maxWidth: '450px', height: 'auto', borderRadius: '12px', margin: '0 auto', display: 'block' }}
         />
+        <div className="feature-copy reveal">
+          <h2 style={{ color: 'var(--c-text)' }}>Know exactly what you're doing.</h2>
+          <p style={{ color: 'var(--c-text-2)' }}>
+            With clear silkscreen indicators and logically grouped I/O, BOXDRIVE makes it immediately obvious where everything goes. The onboard ESP32-C6 gives you the freedom to build exactly what you want.
+          </p>
+        </div>
       </section>
 
-      <section className="feature-band" style={{ display: 'flex', flexWrap: 'wrap', gap: '4rem', alignItems: 'center', marginBottom: '8rem' }}>
-        <div className="feature-copy reveal" style={{ flex: '1 1 400px' }}>
+      <section className="feature-band">
+        <div className="feature-copy reveal">
           <h2>Daisy chain forever.</h2>
           <p>
             Building a multi-axis machine? Connect motors back-to-back using the CAN bus and the high-current XT30 connectors to completely eliminate wiring spaghetti. One cable for power, one for data.
@@ -166,7 +166,7 @@ void loop() {
           width="800"
           height="800"
           loading="lazy"
-          style={{ flex: '1 1 400px', maxWidth: '100%', borderRadius: '12px' }}
+          style={{ width: '100%', maxWidth: '450px', height: 'auto', borderRadius: '12px', margin: '0 auto', display: 'block' }}
         />
       </section>
 
@@ -236,7 +236,7 @@ void loop() {
             width="800"
             height="800"
             loading="lazy"
-            style={{ flex: '1.2 1 400px', maxWidth: '100%', borderRadius: '12px' }}
+            style={{ width: '100%', maxWidth: '450px', height: 'auto', borderRadius: '12px', margin: '0 auto', display: 'block' }}
           />
           <div style={{ flex: '1 1 300px' }}>
             <ul style={{ fontSize: '1.25rem', lineHeight: '2', margin: 0, paddingLeft: '1.5rem', listStyleType: 'disc' }}>

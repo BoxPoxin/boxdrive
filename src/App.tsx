@@ -13,8 +13,15 @@ import { ResetPassword } from './pages/ResetPassword'
 import { Account } from './pages/Account'
 import { Terms } from './pages/Terms'
 
+import { useEffect } from 'react'
+
 function Routes() {
   const { path } = useNav()
+  
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [path])
+
   if (path === '/product') return <Product />
   if (path === '/cart') return <Cart />
   if (path === '/checkout' || path === '/order') return <Checkout />
