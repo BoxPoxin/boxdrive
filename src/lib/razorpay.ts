@@ -66,6 +66,8 @@ export interface ShippingDetails {
   address: string
   city: string
   pincode: string
+  companyName?: string
+  gstNumber?: string
 }
 
 export interface VerifyPaymentPayload extends RazorpayHandlerResponse {
