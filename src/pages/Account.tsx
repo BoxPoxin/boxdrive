@@ -132,6 +132,28 @@ export function Account() {
   const set = (key: keyof ProfileForm) => (e: { target: { value: string } }) =>
     setForm((prev) => ({ ...prev, [key]: e.target.value }))
 
+  const handlePincodeChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+    pincodeKey: 'shippingPincode' | 'billingPincode',
+    cityKey: 'shippingCity' | 'billingCity'
+  ) => {
+    const pin = e.target.value
+    setForm((prev) => ({ ...prev, [pincodeKey]: pin }))
+
+    if (pin.length === 6 && /^\d+$/.test(pin)) {
+      try {
+        const res = await fetch(`https://api.postalpincode.in/pincode/${pin}`)
+        const data = await res.json()
+        if (data && data[0] && data[0].Status === 'Success' && data[0].PostOffice?.length > 0) {
+          const po = data[0].PostOffice[0]
+          setForm((prev) => ({ ...prev, [cityKey]: `${po.District}, ${po.State}` }))
+        }
+      } catch (err) {
+        // silently ignore fetch errors
+      }
+    }
+  }
+
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault()
     setError('')
@@ -217,7 +239,11 @@ export function Account() {
           </label>
           <label>
             PIN code
-            <input value={form.shippingPincode} onChange={set('shippingPincode')} required />
+            <input 
+              value={form.shippingPincode} 
+              onChange={(e) => handlePincodeChange(e, 'shippingPincode', 'shippingCity')} 
+              required 
+            />
           </label>
         </div>
 
@@ -243,7 +269,11 @@ export function Account() {
               </label>
               <label>
                 PIN code
-                <input value={form.billingPincode} onChange={set('billingPincode')} required />
+                <input 
+                  value={form.billingPincode} 
+                  onChange={(e) => handlePincodeChange(e, 'billingPincode', 'billingCity')} 
+                  required 
+                />
               </label>
             </div>
           </>

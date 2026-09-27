@@ -268,6 +268,25 @@ export function Checkout() {
   const set = (key: keyof FormState) => (e: { target: { value: string } }) =>
     setForm((prev) => ({ ...prev, [key]: e.target.value }))
 
+  const onPincodeChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const pin = e.target.value
+    setForm((prev) => ({ ...prev, pincode: pin }))
+    
+    if (pin.length === 6 && /^\d+$/.test(pin)) {
+      try {
+        const res = await fetch(`https://api.postalpincode.in/pincode/${pin}`)
+        const data = await res.json()
+        if (data && data[0] && data[0].Status === 'Success' && data[0].PostOffice?.length > 0) {
+          const po = data[0].PostOffice[0]
+          // The API returns District and State
+          setForm((prev) => ({ ...prev, city: `${po.District}, ${po.State}` }))
+        }
+      } catch (err) {
+        // silently ignore fetch errors
+      }
+    }
+  }
+
   return (
     <div className="narrow-page">
       <h1>Checkout</h1>
@@ -323,7 +342,7 @@ export function Checkout() {
               </label>
               <label>
                 PIN code
-                <input value={form.pincode} onChange={set('pincode')} required />
+                <input value={form.pincode} onChange={onPincodeChange} required />
               </label>
             </div>
             {hasSavedAddress && (
