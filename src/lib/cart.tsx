@@ -71,19 +71,20 @@ export function CartProvider({ children }: { children: ReactNode }) {
       const key = itemKey(item)
       const existing = prev.find((row) => itemKey(row) === key)
       const qty = item.qty ?? 1
+      const maxQty = item.maxQty ?? 10
       if (existing) {
         return prev.map((row) =>
-          itemKey(row) === key ? { ...row, qty: Math.min(10, row.qty + qty) } : row,
+          itemKey(row) === key ? { ...row, qty: Math.min(maxQty, row.qty + qty), maxQty } : row,
         )
       }
-      return [...prev, { ...item, qty }]
+      return [...prev, { ...item, qty, maxQty }]
     })
   }, [])
 
   const setQty: CartContextValue['setQty'] = useCallback((productId, edition, qty) => {
     setItems((prev) =>
       prev
-        .map((row) => (row.productId === productId && row.edition === edition ? { ...row, qty } : row))
+        .map((row) => (row.productId === productId && row.edition === edition ? { ...row, qty: Math.min(row.maxQty ?? 10, qty) } : row))
         .filter((row) => row.qty > 0),
     )
   }, [])

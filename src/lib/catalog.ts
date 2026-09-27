@@ -45,6 +45,7 @@ export type CartItem = {
   price: number
   qty: number
   image: string
+  maxQty?: number
 }
 
 export function itemKey(item: Pick<CartItem, 'productId' | 'edition'>) {

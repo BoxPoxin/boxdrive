@@ -79,6 +79,7 @@ export function Product() {
       editionName: selected.name,
       price: selected.price,
       qty,
+      maxQty,
       image: PRODUCT.images[0].src,
     })
     setAdded(true)

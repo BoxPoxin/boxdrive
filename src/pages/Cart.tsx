@@ -40,7 +40,7 @@ export function Cart() {
               <span>{item.qty}</span>
               <button
                 aria-label="Increase quantity"
-                disabled={item.qty >= 10}
+                disabled={item.qty >= (item.maxQty ?? 10)}
                 onClick={() => setQty(item.productId, item.edition, item.qty + 1)}
               >
                 <Plus size={16} />
