@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from '../lib/nav'
+import { GithubIcon } from '../components/GithubIcon'
 
 const audiences = {
   robotics: {
@@ -26,6 +27,7 @@ type Audience = keyof typeof audiences
 
 export function Home() {
   const [audience, setAudience] = useState<Audience>('robotics')
+  const [copied, setCopied] = useState(false)
   const active = audiences[audience]
 
   return (
@@ -71,22 +73,44 @@ export function Home() {
               <span />
               <span />
               <span />
-              <em>boxdrive.ino</em>
+              <em>01_BasicMotorControl.ino</em>
+              <a
+                href="https://github.com/BoxPoxin/BoxDrive_Library"
+                target="_blank"
+                rel="noreferrer"
+                className="code-github-badge"
+                title="View BoxDrive on GitHub"
+              >
+                <GithubIcon size={14} />
+                <span>GitHub</span>
+              </a>
             </div>
-            <pre>{`#include <BOXDRIVE.h>
+            <pre>{`#include <BoxDrive.h>
 
-BOXDRIVE motor;
+BoxDrive motor;
 
 void setup() {
-  motor.begin();
-  motor.setCurrent(800);
+  motor.begin();         // Init TMC2209 UART + AS5600 I2C
+  motor.setCurrent(800); // 800 mA RMS run current
+  motor.enableMotor();   // Energize stepper coils
 }
 
 void loop() {
-  motor.moveTo(90);
+  motor.moveToAngle(90.0); // 90° closed-loop precision move
+  delay(1000);
+  motor.moveToAngle(0.0);
+  delay(1000);
 }`}</pre>
             <div className="code-status">
-              Everything working fine! · BOXDRIVE on COM3
+              <span>● Online · ESP32-C6 @ 160 MHz · HW v3.26</span>
+              <a
+                href="https://github.com/BoxPoxin/BoxDrive_Library"
+                target="_blank"
+                rel="noreferrer"
+                className="code-status-link"
+              >
+                Get Drivers ↗
+              </a>
             </div>
           </div>
         </div>
@@ -223,6 +247,99 @@ void loop() {
               <p>{spec.body}</p>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* ── Open Source Driver & Library Section ── */}
+      <section className="library-section reveal">
+        <div className="library-header">
+          <div className="library-badge">
+            <GithubIcon size={16} />
+            <span>OPEN SOURCE FIRMWARE & DRIVERS</span>
+          </div>
+          <h2>Flash and run in 60 seconds. <span style={{ color: 'var(--c-accent)' }}>✳</span></h2>
+          <p className="lede">
+            The official <strong>BoxDrive Arduino Library</strong> comes packed with 20 production-tested examples.
+            Control over USB serial, CAN bus daisy-chain, Bluetooth 5, or the on-board Wi-Fi dashboard.
+          </p>
+        </div>
+
+        <div className="library-grid">
+          <div className="library-card">
+            <div className="library-card-icon">⚡</div>
+            <h3>20 Ready-To-Flash Examples</h3>
+            <p>From single-line moves to multi-axis synchronized CAN bus networks and S-curve jerk-limited profiles.</p>
+            <span className="library-tag">Examples Catalog</span>
+          </div>
+          <div className="library-card">
+            <div className="library-card-icon">🧭</div>
+            <h3>Closed-Loop PID & Hand Replay</h3>
+            <p>AS5600 12-bit magnetic feedback, noise-filtered PID anti-jitter, and 5-second kinesthetic teach-and-repeat.</p>
+            <span className="library-tag">AS5600 + PID</span>
+          </div>
+          <div className="library-card">
+            <div className="library-card-icon">🌐</div>
+            <h3>On-Board Wi-Fi Dashboard</h3>
+            <p>Broadcasts an offline hotspot at 192.168.4.1 serving a responsive control panel with live dial and graphs.</p>
+            <span className="library-tag">Web Hotspot</span>
+          </div>
+        </div>
+
+        {/* Terminal / Installation Box */}
+        <div className="terminal-box">
+          <div className="terminal-header">
+            <div className="terminal-dots">
+              <span />
+              <span />
+              <span />
+            </div>
+            <span className="terminal-title">Install via Arduino IDE or Terminal</span>
+            <span className="terminal-lang">BASH</span>
+          </div>
+          <div className="terminal-body">
+            <code>git clone https://github.com/BoxPoxin/BoxDrive_Library.git BoxDrive</code>
+            <button
+              type="button"
+              className="terminal-copy-btn"
+              onClick={() => {
+                void navigator.clipboard.writeText('git clone https://github.com/BoxPoxin/BoxDrive_Library.git BoxDrive')
+                setCopied(true)
+                setTimeout(() => setCopied(false), 2000)
+              }}
+              title="Copy to clipboard"
+            >
+              {copied ? '✓ COPIED' : 'COPY'}
+            </button>
+          </div>
+        </div>
+
+        {/* CTA Buttons */}
+        <div className="library-actions">
+          <a
+            href="https://github.com/BoxPoxin/BoxDrive_Library"
+            target="_blank"
+            rel="noreferrer"
+            className="btn btn-github"
+          >
+            <GithubIcon size={20} />
+            <span>Browse on GitHub</span>
+          </a>
+          <a
+            href="https://github.com/BoxPoxin/BoxDrive_Library/archive/refs/heads/main.zip"
+            target="_blank"
+            rel="noreferrer"
+            className="btn btn-zip"
+          >
+            Download .ZIP Library
+          </a>
+          <a
+            href="https://github.com/BoxPoxin/BoxDrive_Library#complete-examples-catalog-20-examples"
+            target="_blank"
+            rel="noreferrer"
+            className="btn btn-secondary-mono"
+          >
+            View 20 Examples ↗
+          </a>
         </div>
       </section>
 

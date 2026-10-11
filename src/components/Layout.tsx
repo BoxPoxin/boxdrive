@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import { Link, useNav } from '../lib/nav'
 import { useCart } from '../lib/cart'
 import { useAuth } from '../lib/auth'
+import { GithubIcon } from './GithubIcon'
 
 export function Layout({ children }: { children: ReactNode }) {
   const { path, navigate } = useNav()
@@ -69,6 +70,17 @@ export function Layout({ children }: { children: ReactNode }) {
           <span className="brand-word">BOXPOX</span>
         </Link>
         <div className="topbar-actions">
+          <a
+            href="https://github.com/BoxPoxin/BoxDrive_Library"
+            target="_blank"
+            rel="noreferrer"
+            className="topbar-github-btn"
+            aria-label="GitHub Repository - BoxDrive Arduino Library"
+            title="GitHub: BoxDrive Arduino Library & Drivers"
+          >
+            <GithubIcon size={18} />
+            <span className="github-btn-label">Drivers</span>
+          </a>
           <Link to="/product" className="btn btn-buy">
             Buy
           </Link>
@@ -119,6 +131,15 @@ export function Layout({ children }: { children: ReactNode }) {
           <span className="brand-word">BOXPOX</span>
         </Link>
         <div className="footer-links">
+          <a
+            href="https://github.com/BoxPoxin/BoxDrive_Library"
+            target="_blank"
+            rel="noreferrer"
+            className="footer-github-link"
+          >
+            <GithubIcon size={16} />
+            <span>GitHub Library</span>
+          </a>
           <a href="/datasheet.html" target="_blank" rel="noreferrer">
             Datasheet
           </a>
