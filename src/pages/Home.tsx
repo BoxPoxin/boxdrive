@@ -74,22 +74,22 @@ export function Home() {
               <span />
               <span />
               <span />
-              <em>01_BasicMotorControl.ino</em>
+              <em>boxdrive.ino</em>
             </div>
             <pre>{`#include <BoxDrive.h>
 
 BoxDrive motor;
 
 void setup() {
-  motor.begin();         // Init TMC2209 UART + AS5600 I2C
-  motor.setCurrent(800); // 800 mA RMS run current
-  motor.enableMotor();   // Energize stepper coils
+  motor.begin();
+  motor.setCurrent(800);
+  motor.enableMotor();
 }
 
 void loop() {
-  motor.moveToAngle(90.0); // 90° precision move
+  motor.moveToAngle(90);
   delay(1000);
-  motor.moveToAngle(0.0);
+  motor.moveToAngle(0);
   delay(1000);
 }`}</pre>
             <div className="code-status">
