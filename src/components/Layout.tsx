@@ -74,12 +74,11 @@ export function Layout({ children }: { children: ReactNode }) {
             href="https://github.com/BoxPoxin/BoxDrive_Library"
             target="_blank"
             rel="noreferrer"
-            className="topbar-github-btn"
-            aria-label="GitHub Repository - BoxDrive Arduino Library"
-            title="GitHub: BoxDrive Arduino Library & Drivers"
+            className="topbar-github-link"
+            aria-label="GitHub Repository"
+            title="GitHub: BoxDrive Arduino Library"
           >
-            <GithubIcon size={18} />
-            <span className="github-btn-label">Drivers</span>
+            <GithubIcon size={20} />
           </a>
           <Link to="/product" className="btn btn-buy">
             Buy
