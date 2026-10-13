@@ -274,15 +274,21 @@
       }
 
       body {
-        background-color: white;
+        background-color: #EAE6DF !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
         padding: 0;
         font-size: 11pt;
       }
 
       .container {
-        border: none;
+        border: 4px solid #111111 !important;
         box-shadow: none;
-        padding: 0;
+        background: #FFFFFF !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        padding: 2rem;
         max-width: 100%;
       }
 
@@ -291,8 +297,10 @@
       }
 
       .img-box {
-        background: transparent;
-        border: 2px solid black;
+        background: #f4f4f4 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        border: 2px solid black !important;
         margin-bottom: 2rem;
         page-break-inside: avoid;
       }
@@ -314,8 +322,34 @@
       th,
       .pin,
       h2 {
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+      }
+
+      th {
+        background: #111111 !important;
+        color: white !important;
+      }
+
+      h2 {
+        background: #111111 !important;
+        color: white !important;
+      }
+
+      .pin {
+        background: #FFD23F !important;
+        color: #111111 !important;
+      }
+
+      .header {
+        border-bottom: 4px solid #111111 !important;
+      }
+
+      .header-text h1 {
+        color: #FFD23F !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
       }
     }
   </style>
