@@ -273,21 +273,32 @@
         margin: 1.5cm;
       }
 
-      body {
-        background-color: #EAE6DF !important;
+      /*
+       * FIX: Apply print-color-adjust at the ROOT and UNIVERSAL level.
+       * Applying it only to specific selectors leaves other elements unprotected.
+       * Browsers strip background colors from any element that doesn't have this set.
+       */
+      html {
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
-        color-adjust: exact !important;
+      }
+
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      body {
+        background-color: #EAE6DF !important;
+        color: #111111 !important;
         padding: 0;
         font-size: 11pt;
       }
 
       .container {
         border: 4px solid #111111 !important;
-        box-shadow: none;
+        box-shadow: none !important;
         background: #FFFFFF !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
         padding: 2rem;
         max-width: 100%;
       }
@@ -298,11 +309,19 @@
 
       .img-box {
         background: #f4f4f4 !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-        border: 2px solid black !important;
+        border: 2px solid #111111 !important;
         margin-bottom: 2rem;
         page-break-inside: avoid;
+      }
+
+      /*
+       * ROOT CAUSE FIX: filter:invert(1) forces the browser to render the element
+       * in a separate GPU-composited layer. Blink/WebKit cannot properly rasterize
+       * GPU compositor layers during print, causing the ENTIRE PAGE to go white.
+       * Disabling filter in print resolves the blank page issue completely.
+       */
+      .img-box img {
+        filter: none !important;
       }
 
       tr,
@@ -319,22 +338,14 @@
         display: none !important;
       }
 
-      th,
-      .pin,
-      h2 {
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-        color-adjust: exact !important;
-      }
-
       th {
         background: #111111 !important;
-        color: white !important;
+        color: #ffffff !important;
       }
 
       h2 {
         background: #111111 !important;
-        color: white !important;
+        color: #ffffff !important;
       }
 
       .pin {
@@ -348,8 +359,10 @@
 
       .header-text h1 {
         color: #FFD23F !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
+      }
+
+      a {
+        color: #111111 !important;
       }
     }
   </style>
