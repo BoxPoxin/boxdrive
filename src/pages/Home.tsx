@@ -1,409 +1,113 @@
 import { useState } from 'react'
+import { ArrowRight, ArrowUpRight, Check, Copy, Download, FileCode, RotateCw, Wifi } from 'lucide-react'
 import { Link } from '../lib/nav'
 import { GithubIcon } from '../components/GithubIcon'
-import { Check, Copy, Download, FileCode, RotateCw, Wifi } from 'lucide-react'
 
-const audiences = {
-  robotics: {
-    title: 'Joints that never lose a step.',
-    body: 'Closed-loop control on every NEMA 17. The AS5600 watches the shaft, the TMC2209 whispers, and the ESP32-C6 keeps the whole arm in sync over CAN.',
-  },
-  cnc: {
-    title: 'Silence on the mill.',
-    body: 'StealthChop keeps the machine quiet. StallGuard and encoder feedback mean you can push feeds without babysitting skipped steps.',
-  },
-  wireless: {
-    title: 'A mesh of motors.',
-    body: 'Wi-Fi 6, BLE 5 and CAN on the same 42 mm board. Flash once over USB-C, then OTA the fleet from the couch.',
-  },
+const applications = {
+  robotics: { title: 'Motion that stays on target.', body: 'Closed-loop NEMA 17 control for robotic joints and automation. Encoder feedback helps every move land where you planned.' },
+  cnc: { title: 'Quiet precision for CNC.', body: 'Choose smooth, quiet motion or more torque at speed. BOXDRIVE brings the driver, encoder and controller together.' },
+  wireless: { title: 'Connected from day one.', body: 'Wi-Fi, Bluetooth and CAN are built in. Flash over USB-C, then monitor or update your setup wirelessly.' },
 } as const
-
-const audienceLabels: Record<keyof typeof audiences, string> = {
-  robotics: 'Robotics',
-  cnc: 'CNC',
-  wireless: 'Wireless',
-}
-
-type Audience = keyof typeof audiences
+type Application = keyof typeof applications
+const cloneCommand = 'git clone https://github.com/BoxPoxin/BoxDrive_Library.git BoxDrive'
 
 export function Home() {
-  const [audience, setAudience] = useState<Audience>('robotics')
+  const [application, setApplication] = useState<Application>('robotics')
   const [copied, setCopied] = useState(false)
-  const active = audiences[audience]
+  const active = applications[application]
 
-  return (
-    <>
-      {/* ── Hero ───────────────────────────────── */}
-      <section className="hero-wrap">
-        <div className="hero-card">
-          <div className="hero-visual">
-            <img
-              src="/stepper.png"
-              alt="BOXDRIVE mounted on a NEMA 17 stepper motor"
-              width="800"
-              height="800"
-            />
-          </div>
-          <div className="hero-copy">
-            <h1>BOXDRIVE <span className="hero-star" aria-hidden="true">✳</span></h1>
-            <p>
-              Closed-loop stepper controller for makers, roboticists, and many more use cases
-            </p>
-            <Link to="/product" className="btn btn-buy">
-              Buy
-            </Link>
-          </div>
+  const copyCommand = async () => {
+    try {
+      await navigator.clipboard.writeText(cloneCommand)
+      setCopied(true)
+      window.setTimeout(() => setCopied(false), 2000)
+    } catch {
+      setCopied(false)
+    }
+  }
+
+  return <>
+    <section className="hero-wrap">
+      <div className="hero-card">
+        <div className="hero-visual"><img src="/real5.png" alt="BOXDRIVE closed-loop controller mounted on a NEMA 17 motor" width="800" height="800" /></div>
+        <div className="hero-copy">
+          <span className="eyebrow">BOXPOX · Precision motion</span>
+          <h1>Make every movement count.</h1>
+          <p>Meet BOXDRIVE: a compact, closed-loop controller built for your next idea.</p>
+          <Link to="/product" className="btn btn-buy">Explore BOXDRIVE <ArrowUpRight size={17} /></Link>
         </div>
-      </section>
+      </div>
+    </section>
 
-      {/* ── Story: "Feels like home" ───────────── */}
-      <section className="story">
-        <h2 className="reveal">Feels like home. <span style={{color: 'var(--c-accent-2)'}}>✦</span></h2>
-        <div className="story-split reveal">
-          <div className="story-photo">
-            <img
-              src="/illustration2.png"
-              alt="BOXDRIVE pop-art comic style top view"
-              width="800"
-              height="800"
-              loading="lazy"
-            />
-          </div>
-          <div className="code-window">
-            <div className="code-chrome">
-              <span />
-              <span />
-              <span />
-              <em>boxdrive.ino</em>
-            </div>
-            <pre>{`#include <BoxDrive.h>
+    <section className="proof-strip" aria-label="BOXDRIVE highlights">
+      <div className="proof-intro"><span className="eyebrow">Built to move</span><strong>Powerful control.<br/>In one compact board.</strong></div>
+      <div className="proof-stat"><b>12-bit</b><span>magnetic feedback</span></div>
+      <div className="proof-stat"><b>2.0 A</b><span>motor current</span></div>
+      <div className="proof-stat"><b>Wi-Fi · BLE · CAN</b><span>connected out of the box</span></div>
+    </section>
 
-BoxDrive motor;
-
-void setup() {
-  motor.begin();
-  motor.setCurrent(800);
-  motor.enableMotor();
-}
-
-void loop() {
-  motor.moveToAngle(90);
-  delay(1000);
-  motor.moveToAngle(0);
-  delay(1000);
-}`}</pre>
-            <div className="code-status">
-              Everything working fine! · BOXDRIVE on COM3
-            </div>
-          </div>
+    <section className="story" id="technology">
+      <span className="eyebrow">Designed for makers</span>
+      <h2>Everything you need to move with confidence.</h2>
+      <div className="story-split reveal">
+        <div className="story-photo"><img src="/clean_iso.png" alt="BOXDRIVE controller board, product render" width="800" height="800" loading="lazy" /></div>
+        <div className="code-window">
+          <div className="code-chrome"><span/><span/><span/><em>boxdrive.ino</em></div>
+          <pre>{`#include <BoxDrive.h>\n\nBoxDrive motor;\n\nvoid setup() {\n  motor.begin();\n  motor.enableMotor();\n}\n\nvoid loop() {\n  motor.moveToAngle(90);\n}`}</pre>
+          <div className="code-status">Ready to build · BOXDRIVE</div>
         </div>
+      </div>
+      <div className="tabs" role="tablist" aria-label="Explore applications">
+        {(Object.keys(applications) as Application[]).map((key) => <button key={key} role="tab" aria-selected={application === key} className={application === key ? 'tab active' : 'tab'} onClick={() => setApplication(key)}>{key === 'cnc' ? 'CNC' : key === 'wireless' ? 'Connected systems' : 'Robotics'}</button>)}
+      </div>
+      <div className="tab-panel" role="tabpanel"><h3>{active.title}</h3><p>{active.body}</p></div>
+    </section>
 
-        <div className="tabs reveal" role="tablist">
-          {(Object.keys(audiences) as Audience[]).map((key) => (
-            <button
-              key={key}
-              role="tab"
-              aria-selected={audience === key}
-              aria-controls={`panel-${key}`}
-              id={`tab-${key}`}
-              className={audience === key ? 'tab active' : 'tab'}
-              onClick={() => setAudience(key)}
-            >
-              {audienceLabels[key]}
-            </button>
-          ))}
-        </div>
-        <div className="tab-panel" id={`panel-${audience}`} key={audience} role="tabpanel" aria-labelledby={`tab-${audience}`}>
-          <h3>{active.title}</h3>
-          <p>{active.body}</p>
-        </div>
-      </section>
+    <section className="feature-band">
+      <div className="feature-copy reveal"><span className="eyebrow">Simple setup</span><h2>From unboxing to motion.</h2><p>Mount it to a NEMA 17, connect power and USB-C, then build with the tools you already know.</p><Link to="/product" className="text-link">See BOXDRIVE details <ArrowRight size={16} /></Link></div>
+      <img src="/real4.png" alt="Close-up of the BOXDRIVE controller board" className="feature-img reveal" width="800" height="800" loading="lazy" />
+    </section>
 
-      {/* ── Feature band ───────────────────────── */}
-      <section className="feature-band">
-        <div className="feature-copy reveal">
-          <h2>From idea to motion in minutes.</h2>
-          <p>
-            Don&apos;t spend a weekend wiring a driver, encoder and MCU on a
-            breadboard. Bolt BOXDRIVE to the back of a NEMA 17 and start
-            writing firmware.
-          </p>
-          <p className="muted">Start right over</p>
-        </div>
-        <img
-          src="/doodle.png"
-          alt="BOXDRIVE doodle sketch guide with pinouts and features"
-          className="feature-img reveal"
-          width="800"
-          height="800"
-          loading="lazy"
-          style={{ width: '100%', maxWidth: '450px', height: 'auto', borderRadius: '12px', margin: '0 auto', display: 'block' }}
-        />
-      </section>
+    <section className="pillars">
+      <article className="reveal"><span className="eyebrow">01 / Control</span><h2>Closed-loop precision.</h2><ul><li>AS5600 encoder</li><li>12-bit feedback</li></ul><p>Know the shaft’s real position, not just the steps sent.</p></article>
+      <article className="reveal"><span className="eyebrow">02 / Performance</span><h2>Quiet when it counts.</h2><ul><li>TMC2209</li><li>Up to 2 A RMS</li></ul><p>Fine tune for smooth, quiet movement or higher torque.</p></article>
+      <article className="reveal"><span className="eyebrow">03 / Connectivity</span><h2>Ready to work together.</h2><ul><li>Wi-Fi 6</li><li>BLE 5 · CAN</li></ul><p>Connect, control and scale from a single compact board.</p></article>
+    </section>
 
-      <section className="feature-band" style={{ background: 'var(--c-bg-raised)', color: 'var(--c-text)' }}>
-        <img
-          src="/illustration.png"
-          alt="BOXDRIVE pop-art comic style isometric view"
-          className="feature-img reveal"
-          width="800"
-          height="800"
-          loading="lazy"
-          style={{ width: '100%', maxWidth: '450px', height: 'auto', borderRadius: '12px', margin: '0 auto', display: 'block' }}
-        />
-        <div className="feature-copy reveal">
-          <h2 style={{ color: 'var(--c-text)' }}>Know exactly what you're doing.</h2>
-          <p style={{ color: 'var(--c-text-2)' }}>
-            With clear silkscreen indicators and logically grouped I/O, BOXDRIVE makes it immediately obvious where everything goes. The onboard ESP32-C6 gives you the freedom to build exactly what you want.
-          </p>
-        </div>
-      </section>
+    <section className="feature-band feature-band-light">
+      <img src="/real5.png" alt="BOXDRIVE controller and wiring detail" className="feature-img reveal" width="800" height="800" loading="lazy" />
+      <div className="feature-copy reveal"><span className="eyebrow">Scale your setup</span><h2>One neat connection at a time.</h2><p>Link multiple axes over CAN and pass power along the chain. Less wiring, more room to build.</p><a className="text-link" href="/datasheet.html" target="_blank" rel="noreferrer">View the datasheet <ArrowUpRight size={16} /></a></div>
+    </section>
 
-      <section className="feature-band">
-        <div className="feature-copy reveal">
-          <h2>Daisy chain forever.</h2>
-          <p>
-            Building a multi-axis machine? Connect motors back-to-back using the CAN bus and the high-current XT30 connectors to completely eliminate wiring spaghetti. One cable for power, one for data.
-          </p>
-        </div>
-        <img
-          src="/daisy chain.png"
-          alt="BOXDRIVE daisy chained over CAN bus"
-          className="feature-img reveal"
-          width="800"
-          height="800"
-          loading="lazy"
-          style={{ width: '100%', maxWidth: '450px', height: 'auto', borderRadius: '12px', margin: '0 auto', display: 'block' }}
-        />
-      </section>
+    <section className="toolbox" id="specifications">
+      <span className="eyebrow">At a glance</span><h2>Small board. Serious capability.</h2>
+      <div className="spec-grid">{SPECS.map((spec) => <article key={spec.title} className="spec-card reveal"><h3>{spec.title}</h3><p>{spec.body}</p></article>)}</div>
+    </section>
 
-      {/* ── Pillars (3 features) ───────────────── */}
-      <section className="pillars">
-        <article className="reveal">
-          <h2>Silence is a spec.</h2>
-          <ul>
-            <li>StealthChop</li>
-            <li>SpreadCycle</li>
-            <li>2.0 A RMS</li>
-          </ul>
-          <p>
-            TMC2209 keeps the motor quiet even under load. UART configurability
-            for current, microsteps and StallGuard.
-          </p>
-        </article>
-        <article className="reveal">
-          <h2>Absolute position.</h2>
-          <ul>
-            <li>AS5600</li>
-            <li>12-bit</li>
-            <li>0.0879°</li>
-          </ul>
-          <p>
-            A magnet on the shaft, an encoder on the back of the board.
-            Closed-loop without an extra sensor harness.
-          </p>
-        </article>
-        <article className="reveal">
-          <h2>Wireless from day one.</h2>
-          <ul>
-            <li>Wi-Fi 6</li>
-            <li>BLE 5</li>
-            <li>CAN</li>
-          </ul>
-          <p>
-            ESP32-C6 RISC-V at 160 MHz. Program over USB-C like any ESP32, then
-            update the fleet over the air.
-          </p>
-        </article>
-      </section>
+    <section className="library-section reveal" id="resources">
+      <div className="library-header"><span className="eyebrow">Open source</span><h2>Start building with BoxDrive.</h2><p className="lede">Examples and tools for Arduino, CAN, wireless control and closed-loop motion.</p></div>
+      <div className="library-grid">
+        <article className="library-card"><div className="library-card-icon"><FileCode size={22}/></div><h3>Ready-to-use examples</h3><p>Start from proven sketches for motion control and connected axes.</p><span className="library-tag">Arduino library</span></article>
+        <article className="library-card"><div className="library-card-icon"><RotateCw size={22}/></div><h3>Feedback built in</h3><p>AS5600 sensing with closed-loop control for reliable positioning.</p><span className="library-tag">Encoder + PID</span></article>
+        <article className="library-card"><div className="library-card-icon"><Wifi size={22}/></div><h3>Wireless control</h3><p>Connect to the onboard dashboard for quick setup and testing.</p><span className="library-tag">Wi-Fi dashboard</span></article>
+      </div>
+      <div className="terminal-box"><div className="terminal-header"><div className="terminal-dots"><span/><span/><span/></div><span className="terminal-title">Get the library</span><span className="terminal-lang">GIT</span></div><div className="terminal-body"><div className="terminal-code-wrap"><code>{cloneCommand}</code></div><button type="button" className="terminal-copy-btn" onClick={() => void copyCommand()}>{copied ? <Check size={14}/> : <Copy size={14}/>}<span>{copied ? 'COPIED' : 'COPY'}</span></button></div></div>
+      <div className="library-actions"><a href="https://github.com/BoxPoxin/BoxDrive_Library" target="_blank" rel="noreferrer" className="btn btn-github"><GithubIcon size={17}/><span>View library</span></a><a href="https://github.com/BoxPoxin/BoxDrive_Library/archive/refs/heads/main.zip" target="_blank" rel="noreferrer" className="btn btn-secondary-mono"><Download size={16}/><span>Download ZIP</span></a></div>
+    </section>
 
-      {/* ── Toolbox / specs ────────────────────── */}
-      <section className="toolbox">
-        <h2 className="reveal">Small board. Big toolbox.</h2>
-        <p className="lede reveal">
-          Every chip, connector and rail BOXDRIVE packs in.
-        </p>
-        <div className="spec-grid">
-          {SPECS.map((spec) => (
-            <div key={spec.title} className="spec-card reveal">
-              <h3>{spec.title}</h3>
-              <p>{spec.body}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+    <section className="included reveal"><span className="eyebrow">In the box</span><h2>Everything to get started.</h2><div><img src="/clean_iso.png" alt="BOXDRIVE controller board" width="800" height="800" loading="lazy"/><ul><li>BOXDRIVE controller</li><li>XT30 CAN cable</li><li>Aluminum heatsink</li><li>Enclosure and screws</li><li>Encoder magnet</li><li>Quick-start manual</li></ul></div></section>
 
-      {/* ── Open Source Driver & Library Section ── */}
-      <section className="library-section reveal">
-        <div className="library-header">
-          <h2>Open source firmware & drivers.</h2>
-          <p className="lede">
-            The official <strong>BoxDrive Arduino Library</strong> comes packed with 20 production-tested examples.
-            Control over USB serial, CAN bus daisy-chain, Bluetooth 5, or the on-board Wi-Fi dashboard.
-          </p>
-        </div>
-
-        <div className="library-grid">
-          <div className="library-card">
-            <div className="library-card-icon">
-              <FileCode size={24} strokeWidth={2.2} />
-            </div>
-            <h3>20 Ready-To-Flash Examples</h3>
-            <p>From single-line moves to multi-axis synchronized CAN bus networks and S-curve jerk-limited profiles.</p>
-            <span className="library-tag">Examples Catalog</span>
-          </div>
-          <div className="library-card">
-            <div className="library-card-icon">
-              <RotateCw size={24} strokeWidth={2.2} />
-            </div>
-            <h3>Closed-Loop PID & Hand Replay</h3>
-            <p>AS5600 12-bit magnetic feedback, noise-filtered PID anti-jitter, and 5-second kinesthetic teach-and-repeat.</p>
-            <span className="library-tag">AS5600 + PID</span>
-          </div>
-          <div className="library-card">
-            <div className="library-card-icon">
-              <Wifi size={24} strokeWidth={2.2} />
-            </div>
-            <h3>On-Board Wi-Fi Dashboard</h3>
-            <p>Broadcasts an offline hotspot at 192.168.4.1 serving a responsive control panel with live dial and graphs.</p>
-            <span className="library-tag">Web Hotspot</span>
-          </div>
-        </div>
-
-        {/* Terminal / Installation Box */}
-        <div className="terminal-box">
-          <div className="terminal-header">
-            <div className="terminal-dots">
-              <span />
-              <span />
-              <span />
-            </div>
-            <span className="terminal-title">Install via Arduino IDE or Terminal</span>
-            <span className="terminal-lang">BASH</span>
-          </div>
-          <div className="terminal-body">
-            <div className="terminal-code-wrap">
-              <code>git clone https://github.com/BoxPoxin/BoxDrive_Library.git BoxDrive</code>
-            </div>
-            <button
-              type="button"
-              className="terminal-copy-btn"
-              onClick={() => {
-                void navigator.clipboard.writeText('git clone https://github.com/BoxPoxin/BoxDrive_Library.git BoxDrive')
-                setCopied(true)
-                setTimeout(() => setCopied(false), 2000)
-              }}
-              title="Copy to clipboard"
-            >
-              {copied ? (
-                <>
-                  <Check size={14} strokeWidth={2.4} />
-                  <span>COPIED</span>
-                </>
-              ) : (
-                <>
-                  <Copy size={14} strokeWidth={2.4} />
-                  <span>COPY</span>
-                </>
-              )}
-            </button>
-          </div>
-        </div>
-
-        {/* CTA Buttons */}
-        <div className="library-actions">
-          <a
-            href="https://github.com/BoxPoxin/BoxDrive_Library"
-            target="_blank"
-            rel="noreferrer"
-            className="btn btn-github"
-          >
-            <GithubIcon size={18} />
-            <span>View on GitHub</span>
-          </a>
-          <a
-            href="https://github.com/BoxPoxin/BoxDrive_Library/archive/refs/heads/main.zip"
-            target="_blank"
-            rel="noreferrer"
-            className="btn btn-secondary-mono"
-          >
-            <Download size={16} strokeWidth={2.2} />
-            <span>Download .ZIP</span>
-          </a>
-        </div>
-      </section>
-
-      {/* ── What you get ───────────────────────── */}
-      <section className="included reveal" style={{ marginBottom: '8rem' }}>
-        <h2>This is what you get.</h2>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4rem', alignItems: 'center', marginTop: '3rem' }}>
-          <img
-            src="/exploded.png"
-            alt="BOXDRIVE exploded parts view showing heat sink and casing"
-            width="800"
-            height="800"
-            loading="lazy"
-            style={{ width: '100%', maxWidth: '450px', height: 'auto', borderRadius: '12px', margin: '0 auto', display: 'block' }}
-          />
-          <div style={{ flex: '1 1 300px' }}>
-            <ul style={{ fontSize: '1.25rem', lineHeight: '2', margin: 0, paddingLeft: '1.5rem', listStyleType: 'disc' }}>
-              <li><strong>BoxDrive</strong></li>
-              <li>XT30CAN cable</li>
-              <li>Aluminum heat sink</li>
-              <li>Casing</li>
-              <li>4 M3 Screws</li>
-              <li>Magnet</li>
-              <li>Manual</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Closing CTA ────────────────────────── */}
-      <section className="closing reveal">
-        <div>
-          <h2>Get your BOXDRIVE</h2>
-          <p>In stock now. Ships in 2–3 business days.</p>
-        </div>
-        <Link to="/product" className="btn btn-buy">
-          Buy
-        </Link>
-      </section>
-    </>
-  )
+    <section className="closing reveal"><div><span className="eyebrow">Ready when you are</span><h2>Bring your next idea to life.</h2><p>In stock · ships in 2–3 business days</p></div><Link to="/product" className="btn btn-buy">Shop BOXDRIVE <ArrowRight size={16} /></Link></section>
+  </>
 }
 
 const SPECS = [
-  {
-    title: 'ESP32-C6 RISC-V',
-    body: '160 MHz wireless MCU with 4 MB flash and 512 KB SRAM.',
-  },
-  {
-    title: 'TMC2209 driver',
-    body: 'Silent StealthChop / SpreadCycle, UART setup, up to 2.0 A RMS.',
-  },
-  {
-    title: 'AS5600 encoder',
-    body: '12-bit magnetic rotary sensing at 0.0879° resolution.',
-  },
-  {
-    title: '4.75–24 V input',
-    body: 'XT30 daisy-chain power for multi-axis machines.',
-  },
-  {
-    title: 'CAN bus',
-    body: 'SN65HVD230 transceiver so axes talk without a wiring nest.',
-  },
-  {
-    title: 'Wi-Fi 6 + BLE 5',
-    body: 'On-chip radio with PCB antenna. OTA capable.',
-  },
-  {
-    title: 'USB-C',
-    body: 'Native USB programming and debug — Arduino, PlatformIO, ESP-IDF.',
-  },
-  {
-    title: 'NEMA 17 mount',
-    body: '42.31 × 42.31 × 9.1 mm with 4× M3 holes on the 31 mm pattern.',
-  },
+  { title: 'ESP32-C6', body: '160 MHz MCU with Wi-Fi 6 and BLE 5.' },
+  { title: 'TMC2209', body: 'Quiet motion with UART configuration.' },
+  { title: 'AS5600 encoder', body: '12-bit magnetic feedback for precision.' },
+  { title: '4.75–24 V input', body: 'XT30 power for compact builds.' },
+  { title: 'CAN bus', body: 'Reliable communication across multiple axes.' },
+  { title: 'USB-C', body: 'Simple programming and debugging.' },
+  { title: 'NEMA 17 mount', body: 'Compact 42 mm board footprint.' },
+  { title: 'Open platform', body: 'Arduino, PlatformIO and ESP-IDF.' },
 ]

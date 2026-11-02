@@ -1,4 +1,4 @@
-import { ShoppingBag } from 'lucide-react'
+import { Menu, ShoppingBag, X } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import { Link, useNav } from '../lib/nav'
 import { useCart } from '../lib/cart'
@@ -10,6 +10,9 @@ export function Layout({ children }: { children: ReactNode }) {
   const { count } = useCart()
   const { session, logOut } = useAuth()
   const onHome = path === '/'
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  useEffect(() => setMenuOpen(false), [path])
 
   /* ── hide topbar on scroll-down, show on scroll-up ── */
   const lastY = useRef(0)
@@ -27,8 +30,15 @@ export function Layout({ children }: { children: ReactNode }) {
     return () => window.removeEventListener('scroll', onScroll)
   }, [onScroll])
 
-  /* ── reveal on mount ── */
+  /* Observe content after route chunks mount, including lazy-loaded pages. */
   useEffect(() => {
+    const revealAll = (root: ParentNode = document) => {
+      root.querySelectorAll?.('.reveal:not(.visible)').forEach((el) => observer.observe(el))
+    }
+    if (typeof IntersectionObserver === 'undefined') {
+      document.querySelectorAll('.reveal').forEach((el) => el.classList.add('visible'))
+      return
+    }
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
@@ -40,35 +50,38 @@ export function Layout({ children }: { children: ReactNode }) {
       },
       { threshold: 0.08, rootMargin: '0px 0px -40px 0px' },
     )
-    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el))
-    return () => observer.disconnect()
+    revealAll()
+    const mutations = new MutationObserver((records) => {
+      records.forEach((record) => record.addedNodes.forEach((node) => {
+        if (node instanceof Element) {
+          if (node.matches('.reveal')) observer.observe(node)
+          revealAll(node)
+        }
+      }))
+    })
+    mutations.observe(document.querySelector('main') ?? document.body, { childList: true, subtree: true })
+    return () => {
+      mutations.disconnect()
+      observer.disconnect()
+    }
   }, [path]) // re-run on page change
 
   return (
     <div className="site">
-      <div className="marquee">
-        <div className="marquee-content">
-          <span>⚡ SHIPS IN 2-3 BUSINESS DAYS</span>
-          <span className="star">★</span>
-          <span>CLOSED-LOOP NEMA 17</span>
-          <span className="star">★</span>
-          <span>⚡ SHIPS IN 2-3 BUSINESS DAYS</span>
-          <span className="star">★</span>
-          <span>CLOSED-LOOP NEMA 17</span>
-          <span className="star">★</span>
-          <span>⚡ SHIPS IN 2-3 BUSINESS DAYS</span>
-          <span className="star">★</span>
-          <span>CLOSED-LOOP NEMA 17</span>
-        </div>
-      </div>
       <header
         className="topbar"
         style={{ transform: hidden ? 'translateY(-110%)' : 'translateY(0)' }}
       >
         <Link to="/" className="brand" aria-label="BOXPOX — home">
-          <img src="/boxpox_logo.png" alt="" className="brand-mark" />
           <span className="brand-word">BOXPOX</span>
         </Link>
+        <nav className={menuOpen ? 'primary-nav open' : 'primary-nav'} aria-label="Main navigation">
+          <Link to="/">Overview</Link>
+          <Link to="/product">BOXDRIVE</Link>
+          {session && <Link to="/orders">Orders</Link>}
+          <a href="/datasheet.html" target="_blank" rel="noreferrer">Resources</a>
+          {session ? <><Link to="/account" className="mobile-account-link">Account</Link><button type="button" className="mobile-account-link mobile-logout" onClick={() => { void logOut(); navigate('/') }}>Log out</button></> : <Link to="/login" className="mobile-account-link">Log in</Link>}
+        </nav>
         <div className="topbar-actions">
           <a
             href="https://github.com/BoxPoxin/BoxDrive_Library"
@@ -108,6 +121,9 @@ export function Layout({ children }: { children: ReactNode }) {
             <ShoppingBag size={18} strokeWidth={2.4} />
             {count > 0 && <span className="cart-count">{count}</span>}
           </Link>
+          <button className="mobile-menu-toggle" type="button" aria-label={menuOpen ? 'Close menu' : 'Open menu'} aria-expanded={menuOpen} onClick={() => setMenuOpen((value) => !value)}>
+            {menuOpen ? <X size={21} /> : <Menu size={21} />}
+          </button>
         </div>
       </header>
 
@@ -126,7 +142,6 @@ export function Layout({ children }: { children: ReactNode }) {
 
       <footer className="site-footer">
         <Link to="/" className="brand brand-footer" aria-label="BOXPOX — home">
-          <img src="/boxpox_logo.png" alt="" className="brand-mark" />
           <span className="brand-word">BOXPOX</span>
         </Link>
         <div className="footer-links">
@@ -143,6 +158,7 @@ export function Layout({ children }: { children: ReactNode }) {
             Datasheet
           </a>
           <Link to="/product">Shop</Link>
+          <Link to="/orders">Orders</Link>
           <Link to="/cart">Cart</Link>
           <Link to="/terms">Terms & Conditions</Link>
         </div>

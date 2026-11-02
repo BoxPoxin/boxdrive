@@ -12,10 +12,10 @@ export const PRODUCT = {
   tagline: 'Closed-loop stepper controller for NEMA 17 motors',
   version: 'HW v3.26',
   images: [
-    { src: '/doodle.png', alt: 'BOXDRIVE doodle sketch guide' },
     { src: '/real3.png', alt: 'BOXDRIVE real photo 1' },
     { src: '/real4.png', alt: 'BOXDRIVE real photo 2' },
     { src: '/real5.png', alt: 'BOXDRIVE real photo 3' },
+    { src: '/clean_iso.png', alt: 'BOXDRIVE controller product render' },
     { src: '/img3.png', alt: 'BOXDRIVE photo 4' },
     { src: '/img4.png', alt: 'BOXDRIVE photo 5' },
     { src: '/img5.png', alt: 'BOXDRIVE photo 6' },

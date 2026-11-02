@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
+import { CreditCard } from 'lucide-react'
 import { formatInr, itemKey } from '../lib/catalog'
 import { loadLastOrder, saveOrder, useCart, type PlacedOrder } from '../lib/cart'
 import { Link, useNav } from '../lib/nav'
@@ -367,8 +368,8 @@ export function Checkout() {
           </>
         )}
         <div className="payment-method-info">
-          <p className="muted" style={{ margin: '1rem 0 0.5rem 0', fontWeight: 600 }}>
-            ⚡ Payment: Cards, UPI, Netbanking (Secured by Razorpay)
+          <p className="muted payment-note" style={{ margin: '1rem 0 0.5rem 0', fontWeight: 600 }}>
+            <CreditCard size={17} aria-hidden="true" /> Payment: Cards, UPI, Netbanking (Secured by Razorpay)
           </p>
         </div>
         {error && <p className="form-error">{error}</p>}

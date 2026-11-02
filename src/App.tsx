@@ -2,18 +2,19 @@ import { AuthProvider } from './lib/auth'
 import { CartProvider } from './lib/cart'
 import { NavProvider, useNav } from './lib/nav'
 import { Layout } from './components/Layout'
-import { Home } from './pages/Home'
-import { Product } from './pages/Product'
-import { Cart } from './pages/Cart'
-import { Checkout } from './pages/Checkout'
-import { Login } from './pages/Login'
-import { SignUp } from './pages/SignUp'
-import { ForgotPassword } from './pages/ForgotPassword'
-import { ResetPassword } from './pages/ResetPassword'
-import { Account } from './pages/Account'
-import { Terms } from './pages/Terms'
+import { lazy, Suspense, useEffect } from 'react'
 
-import { useEffect } from 'react'
+const Home = lazy(() => import('./pages/Home').then(({ Home }) => ({ default: Home })))
+const Product = lazy(() => import('./pages/Product').then(({ Product }) => ({ default: Product })))
+const Cart = lazy(() => import('./pages/Cart').then(({ Cart }) => ({ default: Cart })))
+const Checkout = lazy(() => import('./pages/Checkout').then(({ Checkout }) => ({ default: Checkout })))
+const Login = lazy(() => import('./pages/Login').then(({ Login }) => ({ default: Login })))
+const SignUp = lazy(() => import('./pages/SignUp').then(({ SignUp }) => ({ default: SignUp })))
+const ForgotPassword = lazy(() => import('./pages/ForgotPassword').then(({ ForgotPassword }) => ({ default: ForgotPassword })))
+const ResetPassword = lazy(() => import('./pages/ResetPassword').then(({ ResetPassword }) => ({ default: ResetPassword })))
+const Account = lazy(() => import('./pages/Account').then(({ Account }) => ({ default: Account })))
+const Orders = lazy(() => import('./pages/Orders').then(({ Orders }) => ({ default: Orders })))
+const Terms = lazy(() => import('./pages/Terms').then(({ Terms }) => ({ default: Terms })))
 
 function Routes() {
   const { path } = useNav()
@@ -30,6 +31,7 @@ function Routes() {
   if (path === '/forgot-password') return <ForgotPassword />
   if (path === '/reset-password') return <ResetPassword />
   if (path === '/account') return <Account />
+  if (path === '/orders') return <Orders />
   if (path === '/terms') return <Terms />
   return <Home />
 }
@@ -40,7 +42,9 @@ export default function App() {
       <AuthProvider>
         <CartProvider>
           <Layout>
-            <Routes />
+            <Suspense fallback={<div className="route-loading"><span className="loader-dot" />Loading BOXPOX…</div>}>
+              <Routes />
+            </Suspense>
           </Layout>
         </CartProvider>
       </AuthProvider>

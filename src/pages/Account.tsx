@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState, type FormEvent } from 'react'
+import { ArrowRight } from 'lucide-react'
 import { Link, useNav } from '../lib/nav'
 import { useAuth } from '../lib/auth'
 import { supabase, type FulfillmentStatus, type OrderRow } from '../lib/supabaseClient'
-import { formatInr, PRODUCT } from '../lib/catalog'
 
 type ProfileForm = {
   fullName: string
@@ -26,20 +26,6 @@ const emptyForm: ProfileForm = {
   billingCity: '',
   billingPincode: '',
   billingSameAsShipping: true,
-}
-
-function productLabel(productId: string) {
-  const [id, edition] = productId.split(':')
-  if (id !== PRODUCT.id) return productId
-  const editionName = PRODUCT.editions[edition as keyof typeof PRODUCT.editions]?.name ?? edition
-  return `${PRODUCT.name} — ${editionName}`
-}
-
-const FULFILLMENT_LABELS: Record<FulfillmentStatus, string> = {
-  processing: 'Processing',
-  shipped: 'Shipped',
-  completed: 'Completed',
-  cancelled: 'Cancelled',
 }
 
 type GroupedOrder = {
@@ -286,36 +272,10 @@ export function Account() {
         </button>
       </form>
 
-      <h2 className="account-section-heading">Past orders</h2>
-      {ordersError && <p className="form-error">{ordersError}</p>}
-      {!ordersError && orders === null && <p className="muted">Loading orders…</p>}
-      {orders !== null && groupedOrders.length === 0 && <p className="muted">No orders yet.</p>}
-      {groupedOrders.length > 0 && (
-        <ul className="order-list">
-          {groupedOrders.map((order) => (
-            <li key={order.checkoutId} className="order-card">
-              <div className="order-card-head">
-                <div>
-                  <strong>Order BPX-{order.checkoutId.slice(0, 8).toUpperCase()}</strong>
-                  <p className="muted">{new Date(order.createdAt).toLocaleDateString()}</p>
-                </div>
-                <div className="order-badges">
-                  <span className={`status-badge fulfillment-${order.fulfillmentStatus}`}>
-                    {FULFILLMENT_LABELS[order.fulfillmentStatus]}
-                  </span>
-                  <span className={`status-badge payment-${order.paymentStatus}`}>
-                    {order.paymentMethod === 'cod' ? 'Cash on delivery' : 'Paid'}
-                    {order.paymentStatus === 'pending' && order.paymentMethod === 'cod' ? ' · pending' : ''}
-                  </span>
-                </div>
-              </div>
-              <p>{order.items.map((item) => `${productLabel(item.product_id)} × ${item.quantity}`).join(', ')}</p>
-              {order.razorpayPaymentId && <p className="muted">Payment ref {order.razorpayPaymentId}</p>}
-              <p className="order-total">{formatInr(order.total)}</p>
-            </li>
-          ))}
-        </ul>
-      )}
+      <section className="account-orders-summary">
+        <div><h2 className="account-section-heading">Orders</h2><p>{ordersError ? 'Order history is temporarily unavailable.' : orders === null ? 'Loading order history…' : groupedOrders.length === 0 ? 'You have no orders yet.' : `${groupedOrders.length} ${groupedOrders.length === 1 ? 'order' : 'orders'} in your history.`}</p></div>
+        <Link to="/orders" className="btn btn-buy">View orders <ArrowRight size={16} /></Link>
+      </section>
 
       <button
         type="button"
