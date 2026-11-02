@@ -20,7 +20,6 @@ export const PRODUCT = {
     { src: '/img4.png', alt: 'BOXDRIVE photo 5' },
     { src: '/img5.png', alt: 'BOXDRIVE photo 6' },
     { src: '/back.png', alt: 'BOXDRIVE back view' },
-    { src: '/exploded.png', alt: 'BOXDRIVE exploded parts view' },
     { src: '/dimentions top.png', alt: 'Top dimensions drawing', invert: true },
     { src: '/dimention side.png', alt: 'Side dimensions drawing', invert: true },
   ] as ProductImage[],

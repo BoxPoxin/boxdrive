@@ -76,7 +76,7 @@ export function Home() {
 
     <section className="feature-band feature-band-light">
       <img src="/real5.png" alt="BOXDRIVE controller and wiring detail" className="feature-img reveal" width="800" height="800" loading="lazy" />
-      <div className="feature-copy reveal"><span className="eyebrow">Scale your setup</span><h2>One neat connection at a time.</h2><p>Link multiple axes over CAN and pass power along the chain. Less wiring, more room to build.</p><a className="text-link" href="/datasheet.html" target="_blank" rel="noreferrer">View the datasheet <ArrowUpRight size={16} /></a></div>
+      <div className="feature-copy reveal"><span className="eyebrow">Scale your setup</span><h2>One neat connection at a time.</h2><p>Link multiple axes over CAN and pass power along the chain. Less wiring, more room to build.</p><a className="text-link" href="/BoxDrive_Datasheet_Preview.pdf" download>Download datasheet PDF <ArrowUpRight size={16} /></a></div>
     </section>
 
     <section className="toolbox" id="specifications">

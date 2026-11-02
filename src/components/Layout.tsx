@@ -79,7 +79,7 @@ export function Layout({ children }: { children: ReactNode }) {
           <Link to="/">Overview</Link>
           <Link to="/product">BOXDRIVE</Link>
           {session && <Link to="/orders">Orders</Link>}
-          <a href="/datasheet.html" target="_blank" rel="noreferrer">Resources</a>
+          <a href="/BoxDrive_Datasheet_Preview.pdf" download>Datasheet PDF</a>
           {session ? <><Link to="/account" className="mobile-account-link">Account</Link><button type="button" className="mobile-account-link mobile-logout" onClick={() => { void logOut(); navigate('/') }}>Log out</button></> : <Link to="/login" className="mobile-account-link">Log in</Link>}
         </nav>
         <div className="topbar-actions">
@@ -154,8 +154,8 @@ export function Layout({ children }: { children: ReactNode }) {
             <GithubIcon size={16} />
             <span>GitHub Library</span>
           </a>
-          <a href="/datasheet.html" target="_blank" rel="noreferrer">
-            Datasheet
+          <a href="/BoxDrive_Datasheet_Preview.pdf" download>
+            Datasheet PDF
           </a>
           <Link to="/product">Shop</Link>
           <Link to="/orders">Orders</Link>
